@@ -16,29 +16,29 @@ It contains four Types of Actors
 
 [accountuml]: ./assets/account-uml.png "Account" 
 
-###Commands:
+### Commands:
 
-####AdjustBalance 
+#### AdjustBalance 
 
 Command which gets converted to [BalanceAdjusted](#balanceadjusted) after processing.  
 Tells the Account to adjust its balance based on the "adjust" argument.
 
     final case class AdjustBalance(adjust: Int) extends Cmd 
  
-####DepositMoney
+#### DepositMoney
 
 Command which gets converted to [MoneyDeposited](#moneydeposited) after processing.  
 Tells the Account to add "amount" to its balance.
     
     final case class DepositMoney(amount: Int) extends Cmd
     
-####GetBalance 
+#### GetBalance 
 
 Account logs its current balance and is trying to replay all events to reproduce the current ActorState.
     
     final case class GetBalance(returnTo: ActorRef[Cmd]) extends Cmd
 
-####ActorState
+#### ActorState
 
 Represents the current balance of the actor. 
     
@@ -46,13 +46,13 @@ Represents the current balance of the actor.
  
 ### Events:
 
-####BalanceAdjusted
+#### BalanceAdjusted
 
 Gets saved in the "Account" event Sequence after processing.
 
     final case class BalanceAdjusted(adjusted: Int, sequenceNr: Int) extends Event
     
-####MoneyDeposited
+#### MoneyDeposited
 
 Gets saved in the "Account" event Sequence after processing.
 
@@ -71,13 +71,13 @@ To run this application:
 
 ```sbt run```
 
-##Testing
+## Testing
 
 To test this application:      
 
 ```sbt test```
 
 
-##Contributors
+## Contributors
 
 [Patrick Stadler](https://github.com/patsta32)
