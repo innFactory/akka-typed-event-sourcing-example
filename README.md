@@ -1,12 +1,13 @@
-# Akka Event Sourcing Example
+# Akka Typed Event Sourcing and CQRS Example
 
-This example [akka](https://github.com/akka/akka) project should represent the concept of event sourcing.  
-It contains four Types of Actors
+This example [akka](https://github.com/akka/akka) project should represent the concept of event sourcing and CQRS.  
+It contains five Types of Actors
 
-- RootActor: Holds the "AccountSupervisor" and "CommandBot" actors
+- RootActor: Holds the "AccountSupervisor", "ReadSide" and "CommandBot" actors
 - AccountSupervisor: Starts the "Account" actors and supervises them
-- CommandBot: Sends a random amount of Commands to the Accounts
-- Account: Holds a list of received events and a state which is derived from those
+- CommandBot: Sends a random amount of Commands to the Accounts and read queries to the ReadSide actors.
+- Account: Holds a list of received events and a state which is derived from those, sends all events to the ReadSide
+- ReadSide: Aggregates all events and creates views to efficiently read the data persistent in the system. 
 
 ## Account Entities:
 
@@ -32,12 +33,6 @@ Tells the Account to add "amount" to its balance.
     
     final case class DepositMoney(amount: Int) extends Cmd
     
-#### GetBalance 
-
-Account logs its current balance and is trying to replay all events to reproduce the current ActorState.
-    
-    final case class GetBalance(returnTo: ActorRef[Cmd]) extends Cmd
-
 #### ActorState
 
 Represents the current balance of the actor. 
@@ -62,7 +57,7 @@ Gets saved in the "Account" event Sequence after processing.
 
 ![Architecture][architecture]  
 
-[architecture]: ./assets/architecture.png "Architecture"
+[architecture]: ./assets/architecturecqrs.png "Architecture"
 
 
 ## Running
