@@ -2,10 +2,9 @@
 package de.innfactory
 
 
-import akka.actor.typed.ActorRef
-import akka.actor.typed.ActorSystem
-import akka.actor.typed.Behavior
-import akka.actor.typed.scaladsl.{AbstractBehavior, ActorContext, Behaviors}
+import akka.actor.typed.receptionist.{Receptionist, ServiceKey}
+import akka.actor.typed.{ActorRef, ActorSystem, Behavior, SupervisorStrategy}
+import akka.actor.typed.scaladsl.{AbstractBehavior, ActorContext, Behaviors, Routers}
 import de.innfactory.common.Cmd
 
 object RootActor {
@@ -15,10 +14,15 @@ object RootActor {
 
 class RootActor(context: ActorContext[Any]) extends AbstractBehavior[Any](context) {
 
-  private val supervisorActor = context.spawn(AccountSupervisor(), "AccountSupervisor")
-  private val commandBot = context.spawn(CommandBot(), "CommandBot")
+  private val readSide1 = context.spawn(ReadSideActor(), "readside1")
+  private val readSide2 = context.spawn(ReadSideActor(), "readside2")
+
+  private val supervisorActor = context.spawn(AccountSupervisor(Seq(readSide1, readSide2)), "AccountSupervisor")
+
+  private val commandBot = context.spawn(CommandBot(Seq(readSide1, readSide2)), "CommandBot")
 
   supervisorActor ! AccountSupervisor.Start(commandBot)
+
 
   override def onMessage(message: Any): Behavior[Any] = {
    this
