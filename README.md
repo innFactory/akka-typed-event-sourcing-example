@@ -78,6 +78,10 @@ To test this application:
 ```sbt test```
 
 
-## Contributors
+## Credits
 
 [Patrick Stadler](https://github.com/patsta32)
+
+Blogbeitrag zum Sourcecode https://innfactory.de/softwareentwicklung/scala-akka-play-co/was-ist-event-sourcing-und-wie-funktioniert-es/
+
+https://innfactory.de
